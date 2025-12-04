@@ -83,3 +83,41 @@
     background-color: #0056b3;
 }
 
+
+@media (max-width: 768px) {
+    #nav {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    #div-buttonsNav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btnNav {
+        margin: 5px;
+        font-size: 15px;
+        padding: 8px 12px;
+    }
+
+    #search-container {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-container .search {
+        margin: 5px 0;
+        width: 90%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    #card-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
