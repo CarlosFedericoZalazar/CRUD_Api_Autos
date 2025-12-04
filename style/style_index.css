@@ -1,0 +1,85 @@
+#nav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #608085;
+    overflow: hidden;
+    /* padding: 10px 20px; */
+}
+
+.btnNav {
+    color: rgb(16, 36, 43);
+    text-align: center;
+    padding: 5px 15px;
+    text-decoration: solid;
+    font-size: 17px;
+    border-radius: 5px;
+    margin: 0 30px;
+}
+
+#search-container {
+    margin: 20px;
+    text-align: center;
+    margin: 5px 20px;
+}
+
+#search-container label {
+    border: none;
+    font-size: 18px;
+}
+
+.search {
+    padding: 5px;
+    margin: 0 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#card-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;   /* separación entre cards */
+    padding: 10px;
+}
+
+.card {
+    width: 120px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: 0.2s;
+    cursor: pointer;
+}
+.card.selected {
+    transform: scale(1.05);
+    border-color: #6a5acd;
+    background: #f0f0ff;
+}
+
+#buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+}
+
+.btnPages {
+    margin: 0 5px;
+    padding: 10px 15px;
+    margin: 0 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+}
+.btnPages:hover{
+    background-color: #0056b3;
+}
+

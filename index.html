@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="/style/style_index.css">
+    <title>Cars</title>
+</head>
+<body>
+    <header>
+        <h1>API Autos - Contenido</h1>
+    </header>
+    <nav id="nav">
+        <div id="div-buttonsNav">
+            <button id="createCarButton" class="btnNav">Create Car</button>
+            <button id="deleteCarButton" class="btnNav">Delete Car</button>
+            <button id="modifyCarButton" class="btnNav">Modify Car</button>
+
+        </div>
+        <div id="search-container">
+            <label for="searchInput" class="search">Search Car:</label>
+            <input type="text" id="searchInput" name="searchInput" class="search" placeholder="marca/motor">
+            <button id="searchButton" class="search">Search</button>
+            <button id="clearSearchButton" class="search">Reset</button>
+        </div>        
+    </nav>
+    <main>
+
+        <div id="card-container">
+            <!-- Car cards will be dynamically inserted here -->
+        </div>
+        <div id="buttons-container">
+            <button id="btnPrev" class="btnPages">Ant</button>
+            <p id="pageIndicator">Page 1</p>
+            <button id="btnNext" class="btnPages">Sig</button>
+        </div>
+    </main>
+    <script src="index.js" type="module" ></script>
+</body>
+</html>
