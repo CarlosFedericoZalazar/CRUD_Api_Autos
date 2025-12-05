@@ -13,6 +13,18 @@ export function createCard(car, autoSelected) {
     title.className = 'card-title';
     title.textContent = car.marca;
 
+    // IMAGE
+    const image = document.createElement('img');
+    image.classList.add('car-image');
+    image.src = car.imagen || "../img/default_car.jpg";
+    image.addEventListener('error', () => {
+        image.src = "../img/default_car.jpg";
+    });
+    image.alt = `Imagen de ${car.marca}`;
+    image.style.maxWidth = '100%';
+    image.style.height = 'auto';
+    body.appendChild(image);
+
     // DESCRIPTION
     const listDescription = document.createElement('ul');
     listDescription.className = 'list-group list-group-flush';

@@ -53,11 +53,21 @@
     transition: 0.2s;
     cursor: pointer;
 }
+
+
 .card.selected {
     transform: scale(1.05);
     border-color: #6a5acd;
     background: #f0f0ff;
 }
+
+.car-image{
+    width: 100%;
+    height: 100px;        
+    object-fit: cover;    
+    border-radius: 8px;   
+}
+
 
 #buttons-container {
     display: flex;
