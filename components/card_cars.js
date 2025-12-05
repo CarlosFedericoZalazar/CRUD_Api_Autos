@@ -63,6 +63,7 @@ export function createCard(car, autoSelected) {
         autoSelected.modelo = car.modelo;
         autoSelected.motor = car.motor;
         autoSelected.año = car.año;
+        autoSelected.imagen = car.imagen || "../img/default_car.jpg";
 
         console.log("Auto seleccionado:", autoSelected);
 

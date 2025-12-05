@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/style_create.css">
+    <title>Modify Car</title>
+</head>
+
+<body>
+    <header>
+        <h1>Modificar Auto</h1>
+        <button id="backButton" onclick="location.href='../index.html'">Volver</button>
+    </header>
+    <main>
+
+        <form>
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" name="marca" ><br><br>
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" name="modelo" ><br><br>
+
+            <label for="motor">Motor:</label>
+            <input type="text" id="motor" name="motor" ><br><br>
+
+            <label for="anio">Año:</label>
+            <input type="number" id="anio" name="anio" ><br><br>
+
+            <label for="imagen">Imagen del auto:</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*" ><br><br>
+
+            <img id="preview" style="max-width:150px; display:none; margin-bottom:15px;">
+            <button id="modifyButton">Modificar Auto</button>
+        </form>
+    </main>
+    <script src="../script/modify_car.js" type="module"></script>
+</body>
+
+</html>

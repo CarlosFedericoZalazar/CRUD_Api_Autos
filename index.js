@@ -1,5 +1,6 @@
 import { createCard } from "./components/card_cars.js";
-import { alertDeleteConfirm } from "./components/alerts.js";
+import { alertDeleteConfirm, alertError } from "./components/alerts.js";
+import { saveData } from "./storage/storage.js";
 
 const btnBuscar = document.getElementById(`searchButton`);
 const btnClearSearch = document.getElementById('clearSearchButton');
@@ -10,6 +11,7 @@ const container = document.getElementById('card-container');
 
 const btnCrearCar = document.getElementById('createCarButton');
 const btnDelete = document.getElementById('deleteCarButton');
+const btnModify = document.getElementById('modifyCarButton');
 
 let totalItems = 0;
 let searchResults = null; // null = modo normal | array = modo búsqueda
@@ -20,7 +22,8 @@ const autoSelected = {
     marca: '',
     modelo: '',
     motor: '',
-    año: ''
+    año: '',
+    imagen: '',
 }
 
 
@@ -170,4 +173,13 @@ btnDelete.addEventListener('click', async () => {
         console.error("Error deleting car:", error);
     }
     });
+});
+
+btnModify.addEventListener('click', () => {
+    if (!autoSelected.id) {
+        alertError("Por favor, selecciona un auto para modificar.");
+        return;
+    }
+    saveData('carToModify', autoSelected);
+    window.location.href = 'html/modify_car.html';
 });
