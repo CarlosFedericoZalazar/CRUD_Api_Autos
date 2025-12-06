@@ -5,7 +5,7 @@ export async function getAllCars() {
 }
 
 export async function deleteCar(id) {
-    const response = await fetch(`https://api-autos-three.vercel.app/cars/${id}`, {
+    const response = await fetch(`https://api-autos-three.vercel.app/cars/id/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
