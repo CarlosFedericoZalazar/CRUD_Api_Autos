@@ -34,31 +34,26 @@ const autoSelected = {
 
 let page = 1;
 const itemsPerPage = 10;
+async function inicio() {
+    const allCars = await getAllCars();
+    arrayCars = allCars; // siempre disponible
 
-async function inicio() { let data;
+    let data = searchResults || allCars;
 
-    if (searchResults) {
-        // estamos viendo resultados de búsqueda
-        data = searchResults;
-    } else {
-        // modo normal, obtengo todos
-        data = await getAllCars();
-        arrayCars = data;
-    }
-    // PAGINACIÓN
     const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;    
+    const end = start + itemsPerPage;
     totalItems = data.length;
-    
-    console.log("ESTAS IMRIMIENDO ESTO->",data);
+
     container.innerHTML = '';
-    for(let i = start; i < end && i < totalItems; i++) {
+    for (let i = start; i < end && i < totalItems; i++) {
         const car = data[i];
         const card = createCard(car, autoSelected);
         container.appendChild(card);
     }
+
     updateButtons();
 }
+
 
 function updateButtons() {
     const totalPages = getTotalPages();
@@ -134,7 +129,7 @@ btnDelete.addEventListener('click', async () => {
     alertDeleteConfirm(`Estás a punto de eliminar ${autoSelected.marca} ${autoSelected.modelo}. ¿Deseas continuar?`).then(async (result) => {
     if (!result.isConfirmed) return;    
     try {
-        const response = deleteCar(autoSelected.id);
+        const response = await deleteCar(autoSelected.id);
         deleteItemArray(autoSelected.id);
         autoSelected.id = null; // reset selección
         inicio(); 
