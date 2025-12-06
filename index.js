@@ -1,6 +1,8 @@
 import { createCard } from "./components/card_cars.js";
 import { alertDeleteConfirm, alertError } from "./components/alerts.js";
 import { saveData } from "./storage/storage.js";
+import { filterCars } from "./utils/filter.js";
+import { getAllCars, deleteCar } from "./api/carsApi.js";
 
 const btnBuscar = document.getElementById(`searchButton`);
 const btnClearSearch = document.getElementById('clearSearchButton');
@@ -12,6 +14,8 @@ const container = document.getElementById('card-container');
 const btnCrearCar = document.getElementById('createCarButton');
 const btnDelete = document.getElementById('deleteCarButton');
 const btnModify = document.getElementById('modifyCarButton');
+
+const showImagesCheckbox = document.getElementById('showImagesCheckbox');
 
 let totalItems = 0;
 let searchResults = null; // null = modo normal | array = modo búsqueda
@@ -28,23 +32,8 @@ const autoSelected = {
     imagen: '',
 }
 
-
 let page = 1;
-const itemsPerPage = 12;
-
-async function fetchData(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        throw error;
-    }
-}
+const itemsPerPage = 10;
 
 async function inicio() { let data;
 
@@ -53,7 +42,7 @@ async function inicio() { let data;
         data = searchResults;
     } else {
         // modo normal, obtengo todos
-        data = await fetchData('https://api-autos-three.vercel.app/cars');
+        data = await getAllCars();
         arrayCars = data;
     }
     // PAGINACIÓN
@@ -61,7 +50,7 @@ async function inicio() { let data;
     const end = start + itemsPerPage;    
     totalItems = data.length;
     
-    console.log(data);
+    console.log("ESTAS IMRIMIENDO ESTO->",data);
     container.innerHTML = '';
     for(let i = start; i < end && i < totalItems; i++) {
         const car = data[i];
@@ -82,6 +71,13 @@ function getTotalPages() {
     return Math.ceil(totalItems / itemsPerPage);
 }
 
+function deleteItemArray(id) {
+    const index = arrayCars.findIndex(car => car.id === id);
+    if (index !== -1) {
+        arrayCars.splice(index, 1);
+    }
+}
+
 inicio();
 
 // EVENTOS BOTONES
@@ -95,14 +91,8 @@ btnBuscar.addEventListener('click', () => {
 
     try {
         // FILTRAR AUTOS POR MARCA O MODELO
-        const filteredCars = arrayCars.filter(car => {
-            const search = inputBuscar.toLowerCase();
-            return (
-                car.marca.toLowerCase().includes(search) ||
-                car.modelo.toLowerCase().includes(search)
-            );
-        });
-
+        const filteredCars = filterCars(arrayCars, inputBuscar);
+        console.log("Autos filtrados:", filteredCars);
         // GUARDAR RESULTADOS PARA PAGINAR Y RENDERIZAR
         searchResults = filteredCars; // si usas un array temporal
         page = 1;
@@ -142,28 +132,18 @@ btnAnterior.addEventListener('click', () => {
 
 btnDelete.addEventListener('click', async () => {
     alertDeleteConfirm(`Estás a punto de eliminar ${autoSelected.marca} ${autoSelected.modelo}. ¿Deseas continuar?`).then(async (result) => {
-    if (!result.isConfirmed) return;
-    
+    if (!result.isConfirmed) return;    
     try {
-        const response = await fetch(`https://api-autos-three.vercel.app/cars/${autoSelected.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': 'carscharlie12345'
-            },
-        });
-
-        const data = await response.json();
-        if (!response.ok) {
-            alertError(data.error);
-            return;
-        }
+        const response = deleteCar(autoSelected.id);
+        deleteItemArray(autoSelected.id);
+        autoSelected.id = null; // reset selección
         inicio(); 
     } catch (error) {
         console.error("Error deleting car:", error);
     }
     });
 });
+
 
 btnModify.addEventListener('click', () => {
     if (!autoSelected.id) {
@@ -172,4 +152,16 @@ btnModify.addEventListener('click', () => {
     }
     saveData('carToModify', autoSelected);
     window.location.href = 'html/modify_car.html';
+});
+
+showImagesCheckbox.addEventListener('change', () => {
+    if (showImagesCheckbox.checked) {
+        // SOLO mostrar autos que NO usan la imagen por defecto
+        searchResults = arrayCars.filter(car => car.imagen !== null && car.imagen.trim() !== '');
+    } else {
+        searchResults = null;
+    }
+    page = 1;
+    pageIndicator.textContent = `Page ${page}`;
+    inicio();
 });
