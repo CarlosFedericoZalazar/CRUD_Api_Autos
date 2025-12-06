@@ -16,6 +16,8 @@ const btnModify = document.getElementById('modifyCarButton');
 let totalItems = 0;
 let searchResults = null; // null = modo normal | array = modo búsqueda
 
+let arrayCars = [];
+
 
 const autoSelected = {
     id: null,
@@ -52,6 +54,7 @@ async function inicio() { let data;
     } else {
         // modo normal, obtengo todos
         data = await fetchData('https://api-autos-three.vercel.app/cars');
+        arrayCars = data;
     }
     // PAGINACIÓN
     const start = (page - 1) * itemsPerPage;
@@ -86,41 +89,28 @@ btnCrearCar.addEventListener('click', () => {
     window.location.href = 'html/create_car.html';
 });
 
-btnBuscar.addEventListener('click', async () => {
+btnBuscar.addEventListener('click', () => {
     const inputBuscar = document.getElementById('searchInput').value.trim();
     if (!inputBuscar) return;
 
     try {
-        const data = await fetchData(`https://api-autos-three.vercel.app/cars/marca/${inputBuscar}`);
+        // FILTRAR AUTOS POR MARCA O MODELO
+        const filteredCars = arrayCars.filter(car => {
+            const search = inputBuscar.toLowerCase();
+            return (
+                car.marca.toLowerCase().includes(search) ||
+                car.modelo.toLowerCase().includes(search)
+            );
+        });
 
-        searchResults = data;   // guardamos resultados
-        page = 1;               // volvemos a página 1
+        // GUARDAR RESULTADOS PARA PAGINAR Y RENDERIZAR
+        searchResults = filteredCars; // si usas un array temporal
+        page = 1;
         pageIndicator.textContent = `Page ${page}`;
-        inicio();               // renderizamos con paginación
+        inicio(); // renderiza el resultado filtrado
 
     } catch (error) {
-        console.log("Error en la búsqueda:", error);
-    }
-});
-
-
-btnBuscar.addEventListener('click', async () => {
-    const inputBuscar = document.getElementById('searchInput').value.trim();
-    console.log(inputBuscar);
-    try{
-        const data = await fetchData(`https://api-autos-three.vercel.app/cars/marca/${inputBuscar}`); 
-        console.log(data);
-
-         container.innerHTML = '';
-    for(let i = 0; i < data.length; i++) {
-        const car = data[i];
-        const card = createCard(car, autoSelected);
-        container.appendChild(card);
-    }
-        
-    }
-    catch(error){
-        console.log("Error en la búsqueda:", error);
+        console.error("Error filtrando autos:", error);
     }
 });
 

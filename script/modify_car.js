@@ -1,10 +1,14 @@
 import { saveData, getData } from '../storage/storage.js';
-import { alertConfirm, alertError } from '../components/alerts.js';
+import { alertConfirm, alertError, alertSucess, confirSaveNotSave } from '../components/alerts.js';
 const { createClient } = supabase;
 
 const dataCar = getData('carToModify');
 
 const form = document.querySelector("form");
+const btnCancel = document.getElementById("cancelButton");
+const backButton = document.getElementById("backButton");
+
+
 const fileInput = document.getElementById("imagen");
 
 const marcaInput = document.getElementById('marca');
@@ -41,6 +45,24 @@ fileInput.addEventListener("change", () => {
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const decision = await confirSaveNotSave(
+        "¿Desea guardar los cambios?",
+        "Puede guardar o no guardar los cambios realizados."
+    );
+
+    console.log("DECISIÓN DEL USUARIO:", decision);
+
+    if (decision === null) {
+        // CANCELÓ
+        return;
+    }
+
+    if (decision === false) {
+        // NO GUARDAR: volver o hacer algo
+        window.location.href = "../index.html";
+        return;
+    }
+
 
     const marcaInput = document.getElementById('marca').value;
     const modeloInput = document.getElementById('modelo').value;
@@ -50,29 +72,29 @@ form.addEventListener("submit", async (e) => {
 
     let imageUrl = dataCar.imagen; // valor original
 
-if (file) {
-    const fileName = Date.now() + "_" + file.name;
+    if (file) {
+        const fileName = Date.now() + "_" + file.name;
 
-    const { data: uploadData, error: uploadError } = await supabaseClient
-        .storage
-        .from("autos")
-        .upload(fileName, file);
+        const { data: uploadData, error: uploadError } = await supabaseClient
+            .storage
+            .from("autos")
+            .upload(fileName, file);
 
-    if (uploadError) {
-        console.error(uploadError);
-        alertError("Error subiendo imagen");
-        return;
+        if (uploadError) {
+            console.error(uploadError);
+            alertError("Error subiendo imagen");
+            return;
+        }
+
+        const { data: urlData } = supabaseClient
+            .storage
+            .from("autos")
+            .getPublicUrl(fileName);
+
+        imageUrl = urlData.publicUrl;
     }
-
-    const { data: urlData } = supabaseClient
-        .storage
-        .from("autos")
-        .getPublicUrl(fileName);
-
-    imageUrl = urlData.publicUrl;
-}
-        // MODIFICAMOS EL AUTO
-        try {
+    // MODIFICAMOS EL AUTO
+    try {
         const response = await fetch(`https://api-autos-three.vercel.app/cars/${dataCar.id}`, {
             method: 'PUT',
             headers: {
@@ -96,12 +118,15 @@ if (file) {
             return;
         }
 
-        alertConfirm("Auto MODIFICADO con éxito");
-        form.reset();
-        preview.style.display = "none";
+        await alertSucess("Auto MODIFICADO con éxito")
+        window.location.href = "../index.html";
 
     } catch (error) {
         console.error("Error modifying car:", error);
     }
 });
 
+backButton.addEventListener("click", async () => {
+    await alertSucess("Modificación cancelada");
+    window.location.href = "../index.html";
+});
