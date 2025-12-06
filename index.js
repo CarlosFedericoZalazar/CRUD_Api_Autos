@@ -2,7 +2,7 @@ import { createCard } from "./components/card_cars.js";
 import { alertDeleteConfirm, alertError } from "./components/alerts.js";
 import { saveData } from "./storage/storage.js";
 import { filterCars } from "./utils/filter.js";
-import { getAllCars, deleteCar } from "./api/carsApi.js";
+import { getAllCars, deleteCar } from "./js/carsApi.js";
 
 const btnBuscar = document.getElementById(`searchButton`);
 const btnClearSearch = document.getElementById('clearSearchButton');
