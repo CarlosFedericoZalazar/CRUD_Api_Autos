@@ -23,6 +23,11 @@
     cursor: pointer;
 }
 
+.btnNav:hover {
+    background-color: #d3d3d3;
+    cursor: pointer;
+}
+
 
 /* ---------------- SEARCH ---------------- */
 

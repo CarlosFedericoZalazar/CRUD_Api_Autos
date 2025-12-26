@@ -134,7 +134,9 @@ btnDelete.addEventListener('click', async () => {
         autoSelected.id = null; // reset selección
         inicio(); 
     } catch (error) {
-        console.error("Error deleting car:", error);
+        console.error("Error deleting CAR:", error);
+        console.log("Auto seleccionado para eliminar:", autoSelected);
+        alertError("Ocurrió un error al eliminar el auto. Por favor, intenta nuevamente.");
     }
     });
 });
