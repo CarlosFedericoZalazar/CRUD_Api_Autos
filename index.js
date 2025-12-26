@@ -16,6 +16,7 @@ const btnDelete = document.getElementById('deleteCarButton');
 const btnModify = document.getElementById('modifyCarButton');
 
 const showImagesCheckbox = document.getElementById('showImagesCheckbox');
+const titleHeader = document.getElementById('title-header');
 
 let totalItems = 0;
 let searchResults = null; // null = modo normal | array = modo búsqueda
@@ -43,6 +44,7 @@ async function inicio() {
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     totalItems = data.length;
+    titleHeader.textContent = `API Autos - Contenido (Total: ${totalItems})`;
 
     container.innerHTML = '';
     for (let i = start; i < end && i < totalItems; i++) {
